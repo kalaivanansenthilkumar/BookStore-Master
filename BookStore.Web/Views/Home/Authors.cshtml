@@ -1,0 +1,108 @@
+﻿@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+
+<div class="page-header">
+    <h1>Authors Details</h1>
+</div>
+<div class="container" style="margin-top 7%;">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <span class="glyphicon  glyphicon glyphicon-zoom-in" aria-hidden="true"></span>  <b>Author List </b>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th><span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></th>
+                                <th>Author Id</th>
+                                <th>Author Name</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead> <!-- END THEAD -->
+
+                        <tbody data-bind="foreach:authors">
+                            <tr>
+                                <td> <button type="button" class="btn btn-default btn-xs" data-bind="click: $parent.getAuthorDetail"> <span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></button> </td>
+                                <td> <span data-bind="text:Id"></span> </td>
+                                <td> <span data-bind="text:Name"></span></td>
+
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true" data-bind="click: $parent.getUpdateAuthor"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.deleteAuthor"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody> <!-- END TBODY -->
+                    </table> <!-- END TABLE -->
+                </div>
+            </div>
+        </div> <!-- END col-md-8-->
+        <!-- ko if:authorDetail() -->
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Detail</h2>
+                </div>
+                <table class="table">
+                    <tr><td>Id</td><td data-bind="text: authorDetail().Id"></td></tr>
+                    <tr><td>Name</td><td data-bind="text: authorDetail().Name"></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- /ko -->
+        <div class="col-md-4">
+            <div class="panel panel-default">
+
+                <div class="panel-heading"> <span class="glyphicon glyphicon glyphicon-tag" aria-hidden="true"></span> <b>Add New Author</b></div>
+                <div class="panel-body">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-3 control-label">Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="inputName" data-bind="value:Name" placeholder="Name" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <button type="button" class="btn btn-success" id="Save" data-bind="click: addAuthor">
+                                <span class="glyphicon  glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                            </button>
+
+                            <button type="button" class="btn btn-info" data-bind="click:clearFields" id="Clear">
+                                <span class="glyphicon  glyphicon glyphicon-refresh" aria-hidden="true"></span> Clear
+                            </button>
+
+                            <button type="button" class="btn btn-warning" data-bind="click:updateAuthor " style="display:none;" id="Update">
+                                <span class="glyphicon  glyphicon glyphicon-pencil" aria-hidden="true"></span> Update Author
+                            </button>
+
+                            <button type="button" class="btn btn-default" data-bind="click:cancel " style="displaynone;" id="Cancel">
+                                <span class="glyphicon  glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- END CONTAINER -->

@@ -1,0 +1,162 @@
+﻿
+@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+<h2>Customers</h2>
+
+<div class="container" style="margin-top 7%;">
+
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <!-- FORM -->
+            <div class="panel panel-default">
+
+                <div class="panel-heading"> <span class="glyphicon glyphicon glyphicon-tag" aria-hidden="true"></span> <b>Add New Customer</b></div>
+                <div class="panel-body">
+
+                    <form>
+
+                        <div class="form-group" style="displaynone;">
+                            <label for="CustomerID">Customer ID</label>
+                            <input type="text" id="CustomerID" class="form-control" data-bind="valueCustID" placeholder="Customer ID" />
+                        </div><!-- END CUSTOMER ID -->
+
+                        <div class="form-group">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" id="FirstName" class="form-control" data-bind="valueFirstName" placeholder="First Name" />
+                        </div><!-- END FIRST NAME -->
+
+                        <div class="form-group">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" id="LastName" class="form-control" data-bind="value LastName" placeholder="Last Name" />
+                        </div><!-- END LAST NAME -->
+
+                        <div class="form-group">
+                            <label for="Email">Email</label>
+                            <input type="email" id="Email" class="form-control" data-bind="value Email" placeholder="Email" />
+                        </div> <!-- END EMAIL -->
+
+                        <div class="form-group">
+                            <label for="Country">Country</label>
+                            <select class="form-control" data-bind="options:countries, optionsText: 'CountryName', value:'CountryId'"></select>
+                        </div> <!-- END COUNTRY -->
+
+
+                        <button type="button" class="btn btn-success" data-bind="click addNewCustomer" id="Save">
+                            <span class="glyphicon  glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                        </button>
+
+                        <button type="button" class="btn btn-info" data-bind="click clearFields" id="Clear">
+                            <span class="glyphicon  glyphicon glyphicon-refresh" aria-hidden="true"></span> Clear
+                        </button>
+
+                        <button type="button" class="btn btn-warning" data-bind="clickupdateCustomer " style="display:none;" id="Update">
+                            <span class="glyphicon  glyphicon glyphicon-pencil" aria-hidden="true"></span> Update Customer
+                        </button>
+
+                        <button type="button" class="btn btn-default" data-bind="clickcancel " style="displaynone;" id="Cancel">
+                            <span class="glyphicon  glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+                        </button>
+
+                    </form> <!-- END FORM -->
+
+
+                </div> <!-- END PANEL BODY-->
+
+            </div><!-- END PANEL-->
+
+        </div> <!-- END  col-md-4 -->
+
+        <div class="col-md-8">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading"><span class="glyphicon  glyphicon glyphicon-stats" aria-hidden="true"></span><b> Charting Customer</b>   </div>
+
+                <div class="panel-body">
+
+
+                    <!-- <img src="images/Chart.png" style="width60%; margin6px 70px;" /> -->
+
+                    <div id="line-chart" style="height 300px;"></div><br /><br />
+
+                </div> <!-- END PANEL-BODY-->
+
+            </div> <!-- END PANEL-->
+
+        </div> <!-- END col-md-8-->
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <span class="glyphicon  glyphicon glyphicon-zoom-in" aria-hidden="true"></span>  <b>Customer List </b>
+                    <div class="loadingZone" style="color #000; displayblock; floatright; displaynone;"> <img src="images/ajax-loader.gif" /> Refresh Data ...</div>
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th><span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></th>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Country</th>
+                                <th></th>
+                            </tr>
+                        </thead> <!-- END THEAD -->
+
+                        <tbody data-bind="foreach customerList">
+
+                            <tr>
+
+                                <td> <button type="button" class="btn btn-default btn-xs" data-bind="click $root.detailCustomer"> <span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></button> </td>
+                                <td> <span data-bind="text CustID"></span> </td>
+                                <td> <span data-bind="text FirstName"></span></td>
+                                <td> <span data-bind="text LastName"></span></td>
+                                <td> <span data-bind="text Email"></span> </td>
+                                <td> <span data-bind="text Country"></span> </td>
+
+                                <td>
+
+                                    <button type="button" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true" data-bind="click $root.deleteCustomer"></span>
+                                    </button>
+                                </td>
+
+                            </tr>
+
+
+
+                        </tbody> <!-- END TBODY -->
+
+                    </table> <!-- END TABLE -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="Scripts/bootstrap.min.js"></script>
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.2.7/morris.min.js"></script>
+</div> <!-- END CONTAINER-->

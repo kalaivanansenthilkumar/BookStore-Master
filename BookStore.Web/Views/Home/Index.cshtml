@@ -1,0 +1,141 @@
+﻿@section scripts {
+    @Scripts.Render("~/bundles/app")
+}
+
+<div class="page-header">
+    <h1>Book Services</h1>
+</div>
+<div class="container" style="margin-top 7%;">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <span class="glyphicon  glyphicon glyphicon-zoom-in" aria-hidden="true"></span>  <b>Book List </b>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th><span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></th>
+                                <th>Author</th>
+                                <th>Title</th>
+                                <th>Genre</th>
+                                <th>Year</th>
+                                <th>Price</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead> <!-- END THEAD -->
+
+                        <tbody data-bind="foreach:books">
+                            <tr>
+                                <td> <button type="button" class="btn btn-default btn-xs" data-bind="click: $parent.getBookDetail"> <span class="glyphicon glyphicon glyphicon-eye-open" aria-hidden="true"></span></button> </td>
+                                <td> <span data-bind="text:AuthorName"></span> </td>
+                                <td> <span data-bind="text:Title"></span></td>
+                                <td> <span data-bind="text:Genre"></span></td>
+                                <td> <span data-bind="text:Year"></span> </td>
+                                <td> <span data-bind="text:Price"></span> </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true" data-bind="click: $parent.getUpdateBook"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $parent.deleteBook"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody> <!-- END TBODY -->
+                    </table> <!-- END TABLE -->
+                </div>
+            </div>
+        </div> <!-- END col-md-8-->
+        <!-- ko if:detail() -->
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Detail</h2>
+                </div>
+                <table class="table">
+                    <tr><td>Author</td><td data-bind="text: detail().AuthorName"></td></tr>
+                    <tr><td>Title</td><td data-bind="text: detail().Title"></td></tr>
+                    <tr><td>Year</td><td data-bind="text: detail().Year"></td></tr>
+                    <tr><td>Genre</td><td data-bind="text: detail().Genre"></td></tr>
+                    <tr><td>Price</td><td data-bind="text: detail().Price"></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- /ko -->
+        <div class="col-md-4">
+            <div class="panel panel-default">
+
+                <div class="panel-heading"> <span class="glyphicon glyphicon glyphicon-tag" aria-hidden="true"></span> <b>Add New Book</b></div>
+
+
+                <div class="panel-body">
+                    <form class="form-horizontal" >
+                        <div class="form-group">
+                            <label for="inputAuthor" class="col-sm-3 control-label">Author</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" data-bind="options:authors, optionsText: 'Name', optionsValue: 'Id',, value: selectedAuthorId"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="inputTitle" class="col-sm-3 control-label">Title</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="inputTitle" data-bind="value:Title" placeholder="Title" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputYear" class="col-sm-3 control-label">Year</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="inputYear" data-bind="value:Year" placeholder="1900" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputGenre" class="col-sm-3 control-label">Genre</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="inputGenre" data-bind="value:Genre" placeholder="Fiction" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPrice" class="col-sm-3 control-label">Price</label>
+                                <div class="col-sm-9">
+                                    <input type="number" step="any" class="form-control" id="inputPrice" data-bind="value:Price" placeholder="0.00" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <button type="button" class="btn btn-success" id="Save" data-bind="click: addBook">
+                                <span class="glyphicon  glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+                            </button>
+
+                            <button type="button" class="btn btn-info" data-bind="click:clearFields" id="Clear">
+                                <span class="glyphicon  glyphicon glyphicon-refresh" aria-hidden="true"></span> Clear
+                            </button>
+
+                            <button type="button" class="btn btn-warning" data-bind="click:updateBook " style="display:none;" id="Update">
+                                <span class="glyphicon  glyphicon glyphicon-pencil" aria-hidden="true"></span> Update Book
+                            </button>
+
+                            <button type="button" class="btn btn-default" data-bind="click:cancel " style="displaynone;" id="Cancel">
+                                <span class="glyphicon  glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- END CONTAINER -->
