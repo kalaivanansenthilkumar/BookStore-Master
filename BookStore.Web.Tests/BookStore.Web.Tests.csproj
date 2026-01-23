@@ -61,7 +61,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BookService\BookStore.Web.csproj">
+    <ProjectReference Include="..\BookStore.Web\BookStore.Web.csproj">
       <Project>{0563925a-b8ad-4496-8897-9dfddcee632c}</Project>
       <Name>BookStore.Web</Name>
     </ProjectReference>
