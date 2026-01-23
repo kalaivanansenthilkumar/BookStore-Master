@@ -18,10 +18,17 @@ namespace BookStore.Web
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/scripts.js",
+                      "~/Scripts/chart-area-demo.js",
+                      "~/Scripts/chart-bar-demo.js",
+                       "~/Scripts/chart-pie-demo.js",
+                      "~/Scripts/datatables-demo.js",
+                      "~/Scripts/datatables-simple-demo.js"
+                      ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
