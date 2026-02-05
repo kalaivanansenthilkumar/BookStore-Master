@@ -143,7 +143,6 @@
     }
     //Update Book  
     self.updateAuthor = function () {
-
         var updateAuthor = {
             Id: self.selectedAuthorId(),
             Name: self.Name(),
@@ -157,8 +156,8 @@
         });
     }
     //Delete Book  
-    self.deleteAuthor = function (book) {
-        ajaxHelper(booksUri + book.Id, 'DELETE').done(function () {
+    self.deleteAuthor = function (author) {
+        ajaxHelper(authorsUri + author.Id, 'DELETE').done(function () {
             alert('Author Deleted Successfully');
             getAuthors();
         })

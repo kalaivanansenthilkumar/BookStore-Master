@@ -17,21 +17,23 @@ namespace BookStore.Web.Controllers
     {
         private BookStoreContext db = new BookStoreContext();
 
-        // GET: api/Books
-        public IQueryable<BookDTO> GetBooks()
+        //// GET: api/Books
+        [ResponseType(typeof(BookDTO))]
+        public async Task<List<BookDTO>> GetBooksAsync()
         {
-            var books = from b in db.Books
-                        select new BookDTO()
-                        {
-                            Id = b.Id,
-                            Title = b.Title,
-                            Price = b.Price,
-                            Year = b.Year,
-                            Genre = b.Genre,
-                            AuthorName = b.Author.Name
-                        };
-
-            return books;
+            return await db.Books
+                .AsNoTracking()
+                .Include(b => b.Author)   // PREVENT N+1 issue
+                .Select(b => new BookDTO
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Price = b.Price,
+                    Year = b.Year,
+                    Genre = b.Genre,
+                    AuthorName = b.Author.Name
+                })
+                .ToListAsync();
         }
 
         // GET: api/Books/5

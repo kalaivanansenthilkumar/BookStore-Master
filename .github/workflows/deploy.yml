@@ -1,0 +1,86 @@
+name: CI/CD - Build & Deploy to IIS
+
+on:
+  push:
+    branches:
+      - development
+      - main
+      - 'release/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    env:
+      PROJECT_PATH: BookStore.Web\BookStore.Web.csproj
+      PACKAGE_DIR: artifacts
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          nuget restore "$env:PROJECT_PATH"
+
+      - name: Set environment (DEV/UAT/PROD)
+        shell: pwsh
+        run: |
+          $ref = '${{ github.ref }}'
+          if ($ref -eq 'refs/heads/development') {
+            $envName = 'DEV'
+          } elseif ($ref -like 'refs/heads/release/*') {
+            $envName = 'UAT'
+          } elseif ($ref -eq 'refs/heads/main' -or $ref -eq 'refs/heads/master') {
+            $envName = 'PROD'
+          } else {
+            $envName = 'DEV'
+          }
+          echo "ENVIRONMENT=$envName" >> $env:GITHUB_ENV
+          echo "Configuration=$envName" >> $env:GITHUB_ENV
+          Write-Host "Selected environment: $envName"
+
+      - name: Build & create Web Deploy package
+        shell: pwsh
+        run: |
+          $proj = Join-Path $env:GITHUB_WORKSPACE $env:PROJECT_PATH
+          $cfg = $env:Configuration
+          $packageDir = Join-Path $env:GITHUB_WORKSPACE $env:PACKAGE_DIR
+          New-Item -ItemType Directory -Path $packageDir -Force | Out-Null
+          $packagePath = Join-Path $packageDir ("BookStoreWeb." + $cfg + ".zip")
+          msbuild "`"$proj`"" /p:Configuration=$cfg /t:Package /p:PackageLocation="`"$packagePath`"" /p:AutoParameterizationWebConfigConnectionStrings=false
+          if (-not (Test-Path $packagePath)) { throw "Package not created: $packagePath" }
+          Write-Host "Package created: $packagePath"
+
+      - name: Deploy to IIS via msdeploy
+        if: always()
+        shell: pwsh
+        env:
+          MSDEPLOY_URL: ${{ secrets.MSDEPLOY_URL }}
+          MSDEPLOY_USER: ${{ secrets.MSDEPLOY_USER }}
+          MSDEPLOY_PASSWORD: ${{ secrets.MSDEPLOY_PASSWORD }}
+        run: |
+          $cfg = $env:ENVIRONMENT
+          $packagePath = Join-Path $env:GITHUB_WORKSPACE ($env:PACKAGE_DIR + "\BookStoreWeb." + $cfg + ".zip")
+          if (-not (Test-Path $packagePath)) { Write-Host "Package not found, skipping deploy"; exit 0 }
+
+          # Find msdeploy.exe
+          $candidates = @(
+            "$env:ProgramFiles\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+            "$env:ProgramFiles(x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe",
+            "msdeploy.exe"
+          )
+          $msdeploy = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $msdeploy) { $msdeploy = (Get-Command msdeploy.exe -ErrorAction SilentlyContinue).Path }
+          if (-not $msdeploy) { throw "msdeploy.exe not found on runner. Install Web Deploy or run on self-hosted runner with Web Deploy." }
+
+          $destUri = $env:MSDEPLOY_URL
+          if (-not $destUri) { Write-Host "MSDEPLOY_URL not set — skipping deploy"; exit 0 }
+
+          $dest = "auto,computerName='$destUri',authType='Basic',userName='$env:MSDEPLOY_USER',password='$env:MSDEPLOY_PASSWORD'"
+          & $msdeploy -verb:sync -source:package="$packagePath" -dest:$dest -allowUntrusted
+          if ($LASTEXITCODE -ne 0) { throw "msdeploy failed with exit code $LASTEXITCODE" }
+          Write-Host "Deployment finished."

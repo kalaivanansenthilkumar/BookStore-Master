@@ -18,6 +18,9 @@ namespace BookStore.Web.Models
         public BookStoreContext() : base("name=BookStoreContext")
         {
             this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+            Database.SetInitializer<BookStoreContext>(null);
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = true;
         }
 
         public System.Data.Entity.DbSet<BookStore.Web.Models.Author> Authors { get; set; }

@@ -1,0 +1,67 @@
+﻿<hr />
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-primary" id="panelLatestMovies">
+            <div class="panel-heading">
+                <h3 class="panel-title">Latest Books Released</h3>
+            </div>
+
+            <div class="panel-body">
+                <div ng-if="loadingBooks">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading books...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="col-xs-12 col-sm-6 movie" ng-repeat="book in latestBooks">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{{book.Title}} </strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="media">
+                                <a class="pull-left" href="#">
+                                    <a class="fancybox pull-left" rel="gallery1" ng-href="../../Content/images/books/{{book.Image}}" title="{{book.Description | limitTo:200}}">
+                                        <img class="media-object" height="120" ng-src="../../Content/images/books/{{book.Image}}" alt="" />
+                                    </a>
+
+                                </a>
+                                <div class="media-body">
+                                    <available-book is-available="{{book.IsAvailable}}"></available-book>
+                                    <div><small>{{book.Description | limitTo: 70}}...</small></div>
+                                    <label class="label label-info">{{book.Genre}}</label><br />
+                                </div>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <span component-rating="{{book.Rating}}"></span>
+                            <a class="fancybox-media pull-right" ng-href="{{book.TrailerURI}}">Trailer<i class="fa fa-video-camera fa-fw"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-success" id="panelMovieGenres">
+            <div class="panel-heading">
+                <h3 class="panel-title">Books Genres</h3>
+            </div>
+
+            <div class="panel-body">
+                <div ng-if="loadingGenres">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading Genres..</label></div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div id="genres-bar"></div>
+            </div>
+            <div class="panel-footer">
+                <p class="text-center"><em>Wanna add a new Book? Head over to the add book form.</em></p>
+                <p class="text-center"><a ng-href="#/books/add" class="btn btn-default">Add new Books</a></p>
+            </div>
+        </div>
+    </div>
+</div>

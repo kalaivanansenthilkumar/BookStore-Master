@@ -14,6 +14,12 @@ namespace BookStore.Web.Controllers
 
             return View();
         }
+        public ActionResult Dashboard()
+        {
+            ViewBag.Title = "Home Page";
+
+            return View();
+        }
         public ActionResult Customers()
         {
             ViewBag.Title = "Home Page";
@@ -38,7 +44,6 @@ namespace BookStore.Web.Controllers
 
             return View();
         }
-
         public ActionResult Detail()
         {
             ViewBag.Title = "Home Page";
@@ -46,6 +51,18 @@ namespace BookStore.Web.Controllers
             return View();
         }
         public ActionResult Delete()
+        {
+            ViewBag.Title = "Home Page";
+
+            return View();
+        }
+
+        public ActionResult Swagger()
+        {
+            return Redirect("~/swagger");
+        }
+
+        public ActionResult Contacts()
         {
             ViewBag.Title = "Home Page";
 

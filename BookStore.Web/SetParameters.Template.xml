@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <!-- Replace placeholders at CI time. DO NOT put secrets here. -->
+  <setParameter name="IIS Web Application Name" value="Default Web Site/BookStore" />
+  <setParameter name="BookStoreContext-Web.config Connection String" value="Data Source=DB_HOST;Initial Catalog=DB_NAME;User Id=DB_USER;Password=__DB_PASSWORD__;TrustServerCertificate=True" />
+</parameters>

@@ -1,0 +1,43 @@
+pipeline {
+  agent { label 'gcp-windows' } // tuned agent label for GCP Windows build agents
+  options { ansiColor('xterm') }
+  parameters {
+    choice(name: 'ENV', choices: ['DEV', 'UAT', 'PROD'], description: 'Target environment (applies Web.<ENV>.config transform)')
+  }
+  environment {
+    PROJECT_PATH = "BookStore.Web\\BookStore.Web.csproj"
+    OUTPUT_DIR = "artifacts"
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+        stage('Package') {
+      steps {
+        powershell "& .\\scripts\\deploy-iis.ps1 -Environment ${params.ENV} -OutputFolder 'artifacts' -PackageOnly"
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        withCredentials([
+          string(credentialsId: 'msdeploy-url', variable: 'MSDEPLOY_URL'),
+          usernamePassword(credentialsId: 'msdeploy-userpass', usernameVariable: 'MSDEPLOY_USER', passwordVariable: 'MSDEPLOY_PASSWORD'),
+          string(credentialsId: 'db-password', variable: 'DB_PASSWORD')   // Jenkins secret: db-password
+        ]) {
+          powershell """
+            & .\\scripts\\deploy-iis.ps1 -Environment ${params.ENV} -OutputFolder 'artifacts' -MsDeployUrl $env:MSDEPLOY_URL -MsDeployUser $env:MSDEPLOY_USER -MsDeployPassword $env:MSDEPLOY_PASSWORD -DbPassword $env:DB_PASSWORD -IisSiteName 'Default Web Site/BookStore' -AllowUntrusted
+          """
+        }
+      }
+    }
+  }
+  post {
+    failure {
+      mail to: 'dev-team@example.com', subject: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}", body: "See ${env.BUILD_URL}"
+    }
+  }
+}

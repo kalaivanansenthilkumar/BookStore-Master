@@ -18,18 +18,13 @@ namespace BookStore.Web
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js",
-                      "~/Scripts/scripts.js",
-                      "~/Scripts/chart-area-demo.js",
-                      "~/Scripts/chart-bar-demo.js",
-                       "~/Scripts/chart-pie-demo.js",
-                      "~/Scripts/datatables-demo.js",
-                      "~/Scripts/datatables-simple-demo.js"
-                      ));
+                      "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.min.css",
-                      "~/Content/site.css"));
+            // Important: use CssRewriteUrlTransform so relative urls (fonts, images) are fixed after bundling
+            bundles.Add(new StyleBundle("~/Content/css")
+                .Include("~/Content/bootstrap.css", new CssRewriteUrlTransform())
+                .Include("~/Content/site.css", new CssRewriteUrlTransform()));
+
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                          "~/Scripts/knockout-{version}.js",
@@ -38,7 +33,7 @@ namespace BookStore.Web
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

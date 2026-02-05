@@ -18,9 +18,10 @@ namespace BookStore.Web.Controllers
         private BookStoreContext db = new BookStoreContext();
 
         // GET: api/Authors
-        public IQueryable<Author> GetAuthors()
+        [ResponseType(typeof(Author))]
+        public async Task<List<Author>> GetAuthors()
         {
-            return db.Authors;
+            return await db.Authors.AsNoTracking().ToListAsync();
         }
 
         // GET: api/Authors/5
